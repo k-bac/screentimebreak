@@ -32,16 +32,16 @@ namespace screentimebreak {
             this.breakTimeSeconds = breakTimeSeconds;
 
             // Labels
-            screenTimeLabel = new CountdownLabel(30);
-            screenTimeLabel.Location = new Point(500, 500);
+            screenTimeLabel = new CountdownLabel(15);
+            screenTimeLabel.Location = new Point(1500, 5);
             screenTimeLabel.Visible = true;
 
             breakTimeLabel = new CountdownLabel(50);
-            breakTimeLabel.Location = new Point(1000, 500);
+            breakTimeLabel.Location = new Point(500, 500);
             breakTimeLabel.Visible = false;
 
-            this.Controls.Add(screenTimeLabel);
-            this.Controls.Add(breakTimeLabel);
+            Controls.Add(screenTimeLabel);
+            Controls.Add(breakTimeLabel);
 
             InitializeComponent();
 
@@ -90,8 +90,12 @@ namespace screentimebreak {
             int screenTime = (screenTimeMinutes * 60) + screenTimeSeconds;
             int breakTime = (breakTimeMinutes * 60) + breakTimeSeconds;
 
+            // Total countdown time left (seconds)
+            int totalCountdownTimeLeft = screenTime;
 
-            int countdownSecondsLeft = screenTime;
+            int countdownMinutesLeft;
+            int countdownSecondsLeft;
+
             bool screenMode = true;
 
             Timer countdownTimer = new Timer();
@@ -102,7 +106,7 @@ namespace screentimebreak {
 
             void countdownTimer_Tick(object sender, EventArgs e) {
 
-                if (countdownSecondsLeft < 0) {
+                if (totalCountdownTimeLeft <= 0) {
                     if (screenMode) {
                         enterBreakMode();
                     }
@@ -111,39 +115,78 @@ namespace screentimebreak {
                     }
                 }
 
+                countdownMinutesLeft = totalCountdownTimeLeft / 60;
+                countdownSecondsLeft = totalCountdownTimeLeft - (60 * countdownMinutesLeft);
+
                 if (screenMode) {
-                    screenTimeLabel.Text = countdownSecondsLeft.ToString();
+                    screenTimeLabel.Text = countdownMinutesLeft.ToString("00") + ":" + countdownSecondsLeft.ToString("00");
                     screenTimeLabel.Refresh();
                 }
                 else {
-                    breakTimeLabel.Text = countdownSecondsLeft.ToString();
+                    breakTimeLabel.Text = "It's time to take a break.\nTime left: " + countdownMinutesLeft.ToString("00") + ":" + countdownSecondsLeft.ToString("00");
                     breakTimeLabel.Refresh();
                 }
 
-                countdownSecondsLeft--;
+                totalCountdownTimeLeft--;
 
             }
 
             void enterScreenMode() {
-                countdownTimer.Stop();
                 screenMode = true;
-                TransparencyKey = BackColor;
+                fadeOutOfBlack();
                 breakTimeLabel.Visible = false;
-                screenTimeLabel.Visible = true;
-                countdownSecondsLeft = screenTime;
-                countdownTimer.Start();
+                totalCountdownTimeLeft = screenTime;
             }
 
             void enterBreakMode() {
-                countdownTimer.Stop();
                 screenMode = false;
-                TransparencyKey = Color.Magenta;
+                fadeIntoBlack();
                 screenTimeLabel.Visible = false;
                 breakTimeLabel.Visible = true;
-                countdownSecondsLeft = breakTime;
-                countdownTimer.Start();
+                totalCountdownTimeLeft = breakTime;
+
             }
 
+            void fadeIntoBlack() {
+                double originalOpacity = Opacity;
+                Opacity = 0.00;
+                Timer fadeInTimer = new Timer();
+                fadeInTimer.Interval = 10;
+                fadeInTimer.Enabled = true;
+
+                fadeInTimer.Tick += new EventHandler(fadeInTimer_Tick);
+
+                TransparencyKey = Color.Magenta;
+
+                void fadeInTimer_Tick(object sender, EventArgs e) {
+                    if (Opacity < originalOpacity) {
+                        Opacity += 0.02;
+                    }
+                    else {
+                        fadeInTimer.Enabled = false;
+                    }
+                }
+            }
+
+            void fadeOutOfBlack() {
+                Timer fadeOutTimer = new Timer();
+                fadeOutTimer.Interval = 10;
+                fadeOutTimer.Enabled = true;
+
+                fadeOutTimer.Tick += new EventHandler(fadeOutTimer_Tick);
+
+                void fadeOutTimer_Tick(object sender, EventArgs e) {
+                    if (Opacity > 0.00) {
+                        Opacity -= 0.02;
+                    }
+                    else {
+                        TransparencyKey = BackColor;
+                        Opacity = 0.70;
+                        fadeOutTimer.Enabled = false;
+                        screenTimeLabel.Visible = true;
+                    }
+                }
+            }
         }
 
     }
