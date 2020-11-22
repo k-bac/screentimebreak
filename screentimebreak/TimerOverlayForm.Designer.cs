@@ -1,6 +1,6 @@
 ﻿
 namespace screentimebreak {
-    partial class Form1 {
+    partial class TimerOverlayForm {
         /// <summary>
         /// Required designer variable.
         /// </summary>
