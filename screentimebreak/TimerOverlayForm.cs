@@ -21,15 +21,21 @@ namespace screentimebreak {
         private int screenTimeSeconds;
         private int breakTimeMinutes;
         private int breakTimeSeconds;
+        private int megaBreakTimeMinutes;
+        private int megaBreakTimeSeconds;
+        private int breakCount = 0;
+        private int breaksBeforeMega = 5;
         private Label screenTimeLabel;
         private Label breakTimeLabel;
 
-        public TimerOverlayForm(int screenTimeMinutes = 0, int screenTimeSeconds = 5, int breakTimeMinutes = 0, int breakTimeSeconds = 8) {
+        public TimerOverlayForm(int screenTimeMinutes = 0, int screenTimeSeconds = 3, int breakTimeMinutes = 0, int breakTimeSeconds = 2, int megaBreakTimeMinutes = 0, int megaBreakTimeSeconds = 30) {
 
             this.screenTimeMinutes = screenTimeMinutes;
             this.screenTimeSeconds = screenTimeSeconds;
             this.breakTimeMinutes = breakTimeMinutes;
             this.breakTimeSeconds = breakTimeSeconds;
+            this.megaBreakTimeMinutes = megaBreakTimeMinutes;
+            this.megaBreakTimeSeconds = megaBreakTimeSeconds;
 
             // Labels
             screenTimeLabel = new CountdownLabel(15);
@@ -89,6 +95,7 @@ namespace screentimebreak {
 
             int screenTime = (screenTimeMinutes * 60) + screenTimeSeconds;
             int breakTime = (breakTimeMinutes * 60) + breakTimeSeconds;
+            int megaBreakTime = (megaBreakTimeMinutes * 60) + megaBreakTimeSeconds;
 
             // Total countdown time left (seconds)
             int totalCountdownTimeLeft = screenTime;
@@ -97,6 +104,7 @@ namespace screentimebreak {
             int countdownSecondsLeft;
 
             bool screenMode = true;
+            bool megaBreak = false;
 
             Timer countdownTimer = new Timer();
             countdownTimer.Interval = 1000;
@@ -123,12 +131,16 @@ namespace screentimebreak {
                     screenTimeLabel.Refresh();
                 }
                 else {
-                    breakTimeLabel.Text = "It's time to take a break.\nTime left: " + countdownMinutesLeft.ToString("00") + ":" + countdownSecondsLeft.ToString("00");
-                    breakTimeLabel.Refresh();
+                    if (megaBreak) {
+                        breakTimeLabel.Text = "It's time to take a longer break.\nTime left: " + countdownMinutesLeft.ToString("00") + ":" + countdownSecondsLeft.ToString("00");
+                        breakTimeLabel.Refresh();
+                    }
+                    else {
+                        breakTimeLabel.Text = "It's time to take a break.\nTime left: " + countdownMinutesLeft.ToString("00") + ":" + countdownSecondsLeft.ToString("00");
+                        breakTimeLabel.Refresh();
+                    }
                 }
-
                 totalCountdownTimeLeft--;
-
             }
 
             void enterScreenMode() {
@@ -139,11 +151,27 @@ namespace screentimebreak {
             }
 
             void enterBreakMode() {
+                if (breakCount == breaksBeforeMega) {
+                    megaBreak = true;
+                }
+                else {
+                    megaBreak = false;
+                }
+                
                 screenMode = false;
                 fadeIntoBlack();
                 screenTimeLabel.Visible = false;
                 breakTimeLabel.Visible = true;
-                totalCountdownTimeLeft = breakTime;
+
+                if (megaBreak) {
+                    breakCount = 0;
+                    totalCountdownTimeLeft = megaBreakTime;
+                }
+                else {
+                    breakCount++;
+                    totalCountdownTimeLeft = breakTime;
+                }
+                
 
             }
 
