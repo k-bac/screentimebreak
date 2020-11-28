@@ -28,7 +28,10 @@ namespace screentimebreak {
         private Label screenTimeLabel;
         private Label breakTimeLabel;
 
-        public TimerOverlayForm(int screenTimeMinutes = 0, int screenTimeSeconds = 3, int breakTimeMinutes = 0, int breakTimeSeconds = 2, int megaBreakTimeMinutes = 0, int megaBreakTimeSeconds = 30) {
+        private TrayMenu trayMenu;
+
+
+        public TimerOverlayForm(int screenTimeMinutes = 10, int screenTimeSeconds = 0, int breakTimeMinutes = 2, int breakTimeSeconds = 30, int megaBreakTimeMinutes = 15, int megaBreakTimeSeconds = 0) {
 
             this.screenTimeMinutes = screenTimeMinutes;
             this.screenTimeSeconds = screenTimeSeconds;
@@ -39,7 +42,7 @@ namespace screentimebreak {
 
             // Labels
             screenTimeLabel = new CountdownLabel(15);
-            screenTimeLabel.Location = new Point(1500, 5);
+            screenTimeLabel.Location = new Point(1600, 5);
             screenTimeLabel.Visible = true;
 
             breakTimeLabel = new CountdownLabel(50);
@@ -65,7 +68,7 @@ namespace screentimebreak {
             SetWindowLong(this.Handle, -20, initialStyle | 0x80000 | 0x20);
 
             // Call function TimerOverlayForm_Load on form load
-            Load += new EventHandler(this.TimerOverlayForm_Load);
+            Load += new EventHandler(TimerOverlayForm_Load);
 
         }
 
@@ -87,6 +90,9 @@ namespace screentimebreak {
 
         // Do things when the form is loaded
         private void TimerOverlayForm_Load(object sender, EventArgs e) {
+
+            // Maybe put these in their own class?
+            trayMenu = new TrayMenu(this);
             startMainLoop();
         }
 
