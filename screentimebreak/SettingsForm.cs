@@ -14,12 +14,17 @@ namespace screentimebreak {
         private Button cancelButton;
 
         // Text labels
+        private Label screenTime;
+        private Label screenTimeSeconds;
+        private Label screenTimeMinutes;
         private Label breakTime;
         private Label breakSeconds;
         private Label breakMinutes;
         private Label megaBreaks;
 
         // Value fields
+        private TextBox screenTimeMinutesInput;
+        private TextBox screenTimeSecondsInput;
         private TextBox breakMinutesInput;
         private TextBox breakSecondsInput;
         private CheckBox megaBreaksCheckbox;
@@ -49,30 +54,63 @@ namespace screentimebreak {
             cancelButton.Location = new Point(95, 330);
             cancelButton.Click += new EventHandler(cancelButton_Click);
 
+            // Screen time
+
+            screenTime = new Label();
+            screenTime.Text = "Screen time";
+            screenTime.Location = new Point(0, 20);
+            screenTime.AutoSize = true;
+
+            screenTimeMinutesInput = new TextBox();
+            screenTimeMinutesInput.Location = new Point(75, 20);
+
+            screenTimeMinutesInput.Size = new Size(25, 10);
+            screenTimeMinutesInput.MaxLength = 2;
+            screenTimeMinutesInput.Text = Properties.Settings.Default.ScreenTimeMinutes.ToString();
+
+            screenTimeSecondsInput = new TextBox();
+            screenTimeSecondsInput.Location = new Point(75, 50);
+            screenTimeSecondsInput.Size = new Size(25, 10);
+            screenTimeSecondsInput.MaxLength = 2;
+            screenTimeSecondsInput.Text = Properties.Settings.Default.ScreenTimeSeconds.ToString();
+
+            screenTimeMinutes = new Label();
+            screenTimeMinutes.Location = new Point(105, 20);
+            screenTimeMinutes.Text = "minutes";
+            screenTimeMinutes.AutoSize = true;
+
+            screenTimeSeconds = new Label();
+            screenTimeSeconds.Location = new Point(105, 50);
+            screenTimeSeconds.Text = "seconds";
+            screenTimeSeconds.AutoSize = true;
+
+            // Breaks
             breakTime = new Label();
             breakTime.Text = "Break time";
-            breakTime.Location = new Point(0, 20);
+            breakTime.Location = new Point(175, 20);
+
             breakTime.AutoSize = true;
 
             breakMinutesInput = new TextBox();
-            breakMinutesInput.Location = new Point(60, 20);
+            breakMinutesInput.Location = new Point(250, 20);
             breakMinutesInput.Size = new Size(25, 10);
             breakMinutesInput.MaxLength = 2;
             breakMinutesInput.Text = Properties.Settings.Default.BreakTimeMinutes.ToString();
 
             breakSecondsInput = new TextBox();
-            breakSecondsInput.Location = new Point(60, 50);
+            breakSecondsInput.Location = new Point(250, 50);
             breakSecondsInput.Size = new Size(25, 10);
             breakSecondsInput.MaxLength = 2;
             breakSecondsInput.Text = Properties.Settings.Default.BreakTimeSeconds.ToString();
 
             breakMinutes = new Label();
-            breakMinutes.Location = new Point(90, 20);
+            breakMinutes.Location = new Point(280, 20);
             breakMinutes.Text = "minutes";
             breakMinutes.AutoSize = true;
 
             breakSeconds = new Label();
-            breakSeconds.Location = new Point(90, 50);
+            breakSeconds.Location = new Point(280, 50);
+
             breakSeconds.Text = "seconds";
             breakSeconds.AutoSize = true;
 
@@ -89,6 +127,12 @@ namespace screentimebreak {
             tabpage1 = new TabPage();
             tabpage1.Text = "Timers";
             tabpage1.TabIndex = 0;
+
+            tabpage1.Controls.Add(screenTime);
+            tabpage1.Controls.Add(screenTimeMinutes);
+            tabpage1.Controls.Add(screenTimeMinutesInput);
+            tabpage1.Controls.Add(screenTimeSeconds);
+            tabpage1.Controls.Add(screenTimeSecondsInput);
 
             tabpage1.Controls.Add(breakTime);
 
@@ -133,6 +177,8 @@ namespace screentimebreak {
         }
 
         private void applySettings() {
+            Properties.Settings.Default.ScreenTimeMinutes = Convert.ToInt32(screenTimeMinutesInput.Text);
+            Properties.Settings.Default.ScreenTimeSeconds = Convert.ToInt32(screenTimeSecondsInput.Text);
             Properties.Settings.Default.BreakTimeMinutes = Convert.ToInt32(breakMinutesInput.Text);
             Properties.Settings.Default.BreakTimeSeconds = Convert.ToInt32(breakSecondsInput.Text);
             Properties.Settings.Default.MegaBreaksEnabled = megaBreaksCheckbox.Checked;
