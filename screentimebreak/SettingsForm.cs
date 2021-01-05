@@ -16,19 +16,19 @@ namespace screentimebreak {
 
 
         // Text labels
-        private Label screenTime;
-        private Label screenTimeSeconds;
-        private Label screenTimeMinutes;
-        private Label breakTime;
-        private Label breakSeconds;
-        private Label breakMinutes;
-        private Label megaBreaks;
+        private SettingsLabel screenTime;
+        private SettingsLabel screenTimeSeconds;
+        private SettingsLabel screenTimeMinutes;
+        private SettingsLabel breakTime;
+        private SettingsLabel breakSeconds;
+        private SettingsLabel breakMinutes;
+        private SettingsLabel megaBreaks;
 
         // Value fields
-        private TextBox screenTimeMinutesInput;
-        private TextBox screenTimeSecondsInput;
-        private TextBox breakMinutesInput;
-        private TextBox breakSecondsInput;
+        private SettingsTimeInputField screenTimeMinutesInput;
+        private SettingsTimeInputField screenTimeSecondsInput;
+        private SettingsTimeInputField breakMinutesInput;
+        private SettingsTimeInputField breakSecondsInput;
         private CheckBox megaBreaksCheckbox;
 
         // Tabs + TabControl
@@ -64,68 +64,30 @@ namespace screentimebreak {
 
             // Screen time
 
-            screenTime = new Label();
-            screenTime.Text = "Screen time";
-            screenTime.Location = new Point(0, 20);
-            screenTime.AutoSize = true;
-
-            screenTimeMinutesInput = new TextBox();
-            screenTimeMinutesInput.Location = new Point(75, 20);
-
-            screenTimeMinutesInput.Size = new Size(25, 10);
-            screenTimeMinutesInput.MaxLength = 2;
+            screenTime = new SettingsLabel(new Point(0, 20), "Screen time");
+            screenTimeMinutesInput = new SettingsTimeInputField(new Point(75, 20));
             screenTimeMinutesInput.Text = Properties.Settings.Default.ScreenTimeMinutes.ToString();
 
-            screenTimeSecondsInput = new TextBox();
-            screenTimeSecondsInput.Location = new Point(75, 50);
-            screenTimeSecondsInput.Size = new Size(25, 10);
-            screenTimeSecondsInput.MaxLength = 2;
+            screenTimeSecondsInput = new SettingsTimeInputField(new Point(75, 50));
             screenTimeSecondsInput.Text = Properties.Settings.Default.ScreenTimeSeconds.ToString();
 
-            screenTimeMinutes = new Label();
-            screenTimeMinutes.Location = new Point(105, 20);
-            screenTimeMinutes.Text = "minutes";
-            screenTimeMinutes.AutoSize = true;
-
-            screenTimeSeconds = new Label();
-            screenTimeSeconds.Location = new Point(105, 50);
-            screenTimeSeconds.Text = "seconds";
-            screenTimeSeconds.AutoSize = true;
+            screenTimeMinutes = new SettingsLabel(new Point(105, 20), "minutes");
+            screenTimeSeconds = new SettingsLabel(new Point(105, 50), "seconds");
 
             // Breaks
-            breakTime = new Label();
-            breakTime.Text = "Break time";
-            breakTime.Location = new Point(175, 20);
+            breakTime = new SettingsLabel(new Point(175, 20), "Break time");
 
-            breakTime.AutoSize = true;
-
-            breakMinutesInput = new TextBox();
-            breakMinutesInput.Location = new Point(250, 20);
-            breakMinutesInput.Size = new Size(25, 10);
-            breakMinutesInput.MaxLength = 2;
+            breakMinutesInput = new SettingsTimeInputField(new Point(250, 20));
             breakMinutesInput.Text = Properties.Settings.Default.BreakTimeMinutes.ToString();
 
-            breakSecondsInput = new TextBox();
-            breakSecondsInput.Location = new Point(250, 50);
-            breakSecondsInput.Size = new Size(25, 10);
-            breakSecondsInput.MaxLength = 2;
+            breakSecondsInput = new SettingsTimeInputField(new Point(250, 50));
             breakSecondsInput.Text = Properties.Settings.Default.BreakTimeSeconds.ToString();
 
-            breakMinutes = new Label();
-            breakMinutes.Location = new Point(280, 20);
-            breakMinutes.Text = "minutes";
-            breakMinutes.AutoSize = true;
+            breakMinutes = new SettingsLabel(new Point(280, 20), "minutes");
 
-            breakSeconds = new Label();
-            breakSeconds.Location = new Point(280, 50);
+            breakSeconds = new SettingsLabel(new Point(280, 50), "seconds");
 
-            breakSeconds.Text = "seconds";
-            breakSeconds.AutoSize = true;
-
-            megaBreaks = new Label();
-            megaBreaks.Location = new Point(0, 100);
-            megaBreaks.Text = "Enable megabreaks";
-            megaBreaks.AutoSize = true;
+            megaBreaks = new SettingsLabel(new Point(0, 100), "Enable megabreaks");
 
             megaBreaksCheckbox = new CheckBox();
             megaBreaksCheckbox.Location = new Point(120, 100);

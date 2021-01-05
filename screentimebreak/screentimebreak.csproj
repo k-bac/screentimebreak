@@ -52,6 +52,12 @@
     <Compile Include="SettingsForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="SettingsLabel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="SettingsTimeInputField.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="TimerOverlayForm.cs">
       <SubType>Form</SubType>
     </Compile>
