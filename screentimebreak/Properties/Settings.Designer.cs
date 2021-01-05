@@ -8,17 +8,102 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-
 namespace screentimebreak.Properties {
+    
+    
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "11.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.8.1.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
-
+        
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
-
+        
         public static Settings Default {
             get {
                 return defaultInstance;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("20")]
+        public int ScreenTimeMinutes {
+            get {
+                return ((int)(this["ScreenTimeMinutes"]));
+            }
+            set {
+                this["ScreenTimeMinutes"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int ScreenTimeSeconds {
+            get {
+                return ((int)(this["ScreenTimeSeconds"]));
+            }
+            set {
+                this["ScreenTimeSeconds"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("5")]
+        public int BreakTimeMinutes {
+            get {
+                return ((int)(this["BreakTimeMinutes"]));
+            }
+            set {
+                this["BreakTimeMinutes"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int BreakTimeSeconds {
+            get {
+                return ((int)(this["BreakTimeSeconds"]));
+            }
+            set {
+                this["BreakTimeSeconds"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("15")]
+        public int MegaBreakTimeMinutes {
+            get {
+                return ((int)(this["MegaBreakTimeMinutes"]));
+            }
+            set {
+                this["MegaBreakTimeMinutes"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int MegaBreakTimeSeconds {
+            get {
+                return ((int)(this["MegaBreakTimeSeconds"]));
+            }
+            set {
+                this["MegaBreakTimeSeconds"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool MegaBreaksEnabled {
+            get {
+                return ((bool)(this["MegaBreaksEnabled"]));
+            }
+            set {
+                this["MegaBreaksEnabled"] = value;
             }
         }
     }

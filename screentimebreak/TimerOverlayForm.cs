@@ -25,20 +25,22 @@ namespace screentimebreak {
         private int megaBreakTimeSeconds;
         private int breakCount = 0;
         private int breaksBeforeMega = 5;
+        private bool megaBreaksEnabled;
         private Label screenTimeLabel;
         private Label breakTimeLabel;
 
         private TrayMenu trayMenu;
 
 
-        public TimerOverlayForm(int screenTimeMinutes = 10, int screenTimeSeconds = 0, int breakTimeMinutes = 2, int breakTimeSeconds = 30, int megaBreakTimeMinutes = 15, int megaBreakTimeSeconds = 0) {
+        public TimerOverlayForm() {
 
-            this.screenTimeMinutes = screenTimeMinutes;
-            this.screenTimeSeconds = screenTimeSeconds;
-            this.breakTimeMinutes = breakTimeMinutes;
-            this.breakTimeSeconds = breakTimeSeconds;
-            this.megaBreakTimeMinutes = megaBreakTimeMinutes;
-            this.megaBreakTimeSeconds = megaBreakTimeSeconds;
+            this.screenTimeMinutes = Properties.Settings.Default.ScreenTimeMinutes;
+            this.screenTimeSeconds = Properties.Settings.Default.ScreenTimeSeconds;
+            this.breakTimeMinutes = Properties.Settings.Default.BreakTimeMinutes;
+            this.breakTimeSeconds = Properties.Settings.Default.BreakTimeSeconds;
+            this.megaBreakTimeMinutes = Properties.Settings.Default.MegaBreakTimeMinutes;
+            this.megaBreakTimeSeconds = Properties.Settings.Default.MegaBreakTimeSeconds;
+            this.megaBreaksEnabled = Properties.Settings.Default.MegaBreaksEnabled;
 
             // Labels
             screenTimeLabel = new CountdownLabel(15);
