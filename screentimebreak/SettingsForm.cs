@@ -16,13 +16,16 @@ namespace screentimebreak {
 
 
         // Text labels
-        private SettingsLabel screenTime;
-        private SettingsLabel screenTimeSeconds;
-        private SettingsLabel screenTimeMinutes;
-        private SettingsLabel breakTime;
-        private SettingsLabel breakSeconds;
-        private SettingsLabel breakMinutes;
-        private SettingsLabel megaBreaks;
+        private SettingsLabel screenTimeLabel;
+        private SettingsLabel screenTimeSecondsLabel;
+        private SettingsLabel screenTimeMinutesLabel;
+        private SettingsLabel breakTimeLabel;
+        private SettingsLabel breakSecondsLabel;
+        private SettingsLabel breakMinutesLabel;
+        private SettingsLabel megaBreaksEnableLabel;
+        private SettingsLabel megaBreaksLabel;
+        private SettingsLabel megaBreakMinutesLabel;
+        private SettingsLabel megaBreakSecondsLabel;
 
         // Value fields
         private SettingsTimeInputField screenTimeMinutesInput;
@@ -30,10 +33,12 @@ namespace screentimebreak {
         private SettingsTimeInputField breakMinutesInput;
         private SettingsTimeInputField breakSecondsInput;
         private CheckBox megaBreaksCheckbox;
+        private SettingsTimeInputField megaBreakMinutesInput;
+        private SettingsTimeInputField megaBreakSecondsInput;
 
         // Tabs + TabControl
-        private TabPage tabpage1;
-        private TabPage tabpage2;
+        private TabPage timersTabPage;
+        private TabPage interfaceTabPage;
         private TabControl tabControl;
 
         public SettingsForm() {
@@ -41,7 +46,6 @@ namespace screentimebreak {
             Visible = true;
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Text = "Settings";
-
             addComponents();
         }
 
@@ -63,68 +67,77 @@ namespace screentimebreak {
             applyButton.Click += new EventHandler(applyButton_Click);
 
             // Screen time
-
-            screenTime = new SettingsLabel(new Point(0, 20), "Screen time");
+            screenTimeLabel = new SettingsLabel(new Point(0, 20), "Screen time");
             screenTimeMinutesInput = new SettingsTimeInputField(new Point(75, 20));
             screenTimeMinutesInput.Text = Properties.Settings.Default.ScreenTimeMinutes.ToString();
 
             screenTimeSecondsInput = new SettingsTimeInputField(new Point(75, 50));
             screenTimeSecondsInput.Text = Properties.Settings.Default.ScreenTimeSeconds.ToString();
 
-            screenTimeMinutes = new SettingsLabel(new Point(105, 20), "minutes");
-            screenTimeSeconds = new SettingsLabel(new Point(105, 50), "seconds");
+            screenTimeMinutesLabel = new SettingsLabel(new Point(105, 20), "minutes");
+            screenTimeSecondsLabel = new SettingsLabel(new Point(105, 50), "seconds");
 
             // Breaks
-            breakTime = new SettingsLabel(new Point(175, 20), "Break time");
-
+            breakTimeLabel = new SettingsLabel(new Point(175, 20), "Break time");
             breakMinutesInput = new SettingsTimeInputField(new Point(250, 20));
             breakMinutesInput.Text = Properties.Settings.Default.BreakTimeMinutes.ToString();
 
             breakSecondsInput = new SettingsTimeInputField(new Point(250, 50));
             breakSecondsInput.Text = Properties.Settings.Default.BreakTimeSeconds.ToString();
 
-            breakMinutes = new SettingsLabel(new Point(280, 20), "minutes");
+            breakMinutesLabel = new SettingsLabel(new Point(280, 20), "minutes");
+            breakSecondsLabel = new SettingsLabel(new Point(280, 50), "seconds");
 
-            breakSeconds = new SettingsLabel(new Point(280, 50), "seconds");
+            // Megabreaks
+            megaBreaksEnableLabel = new SettingsLabel(new Point(0, 100), "Enable megabreaks");
+            megaBreaksLabel = new SettingsLabel(new Point(0, 150), "Megabreaks");
+            megaBreakMinutesInput = new SettingsTimeInputField(new Point(75, 150));
+            megaBreakMinutesInput.Text = Properties.Settings.Default.MegaBreakTimeMinutes.ToString();
 
-            megaBreaks = new SettingsLabel(new Point(0, 100), "Enable megabreaks");
+            megaBreakSecondsInput = new SettingsTimeInputField(new Point(75, 180));
+            megaBreakSecondsInput.Text = Properties.Settings.Default.MegaBreakTimeSeconds.ToString();
+
+            megaBreakMinutesLabel = new SettingsLabel(new Point(105, 150), "minutes");
+            megaBreakSecondsLabel = new SettingsLabel(new Point(105, 185), "seconds");
 
             megaBreaksCheckbox = new CheckBox();
             megaBreaksCheckbox.Location = new Point(120, 100);
             megaBreaksCheckbox.Checked = Properties.Settings.Default.MegaBreaksEnabled;
 
             // Tab 1 (Timers)
-            tabpage1 = new TabPage();
-            tabpage1.Text = "Timers";
-            tabpage1.TabIndex = 0;
+            timersTabPage = new TabPage();
+            timersTabPage.Text = "Timers";
+            timersTabPage.TabIndex = 0;
 
-            tabpage1.Controls.Add(screenTime);
-            tabpage1.Controls.Add(screenTimeMinutes);
-            tabpage1.Controls.Add(screenTimeMinutesInput);
-            tabpage1.Controls.Add(screenTimeSeconds);
-            tabpage1.Controls.Add(screenTimeSecondsInput);
+            timersTabPage.Controls.Add(screenTimeLabel);
+            timersTabPage.Controls.Add(screenTimeMinutesLabel);
+            timersTabPage.Controls.Add(screenTimeMinutesInput);
+            timersTabPage.Controls.Add(screenTimeSecondsLabel);
+            timersTabPage.Controls.Add(screenTimeSecondsInput);
 
-            tabpage1.Controls.Add(breakTime);
+            timersTabPage.Controls.Add(breakTimeLabel);
+            timersTabPage.Controls.Add(breakMinutesLabel);
+            timersTabPage.Controls.Add(breakMinutesInput);
+            timersTabPage.Controls.Add(breakSecondsLabel);
+            timersTabPage.Controls.Add(breakSecondsInput);
 
-            tabpage1.Controls.Add(breakMinutes);
-            tabpage1.Controls.Add(breakMinutesInput);
-
-            tabpage1.Controls.Add(breakSeconds);
-            tabpage1.Controls.Add(breakSecondsInput);
-
-            tabpage1.Controls.Add(megaBreaks);
-            tabpage1.Controls.Add(megaBreaksCheckbox);
+            timersTabPage.Controls.Add(megaBreaksEnableLabel);
+            timersTabPage.Controls.Add(megaBreaksLabel);
+            timersTabPage.Controls.Add(megaBreaksCheckbox);
+            timersTabPage.Controls.Add(megaBreakMinutesLabel);
+            timersTabPage.Controls.Add(megaBreakMinutesInput);
+            timersTabPage.Controls.Add(megaBreakSecondsLabel);
+            timersTabPage.Controls.Add(megaBreakSecondsInput);
 
             // Tab 2 (Interface)
-            tabpage2 = new TabPage();
-            tabpage2.Text = "Interface";
-            tabpage2.TabIndex = 1;
+            interfaceTabPage = new TabPage();
+            interfaceTabPage.Text = "Interface";
+            interfaceTabPage.TabIndex = 1;
 
             tabControl = new TabControl();
-            //tabControl.ItemSize = new System.Drawing.Size(400, 200);
 
-            tabControl.Controls.Add(tabpage1);
-            tabControl.Controls.Add(tabpage2);
+            tabControl.Controls.Add(timersTabPage);
+            tabControl.Controls.Add(interfaceTabPage);
 
             tabControl.Dock = DockStyle.Fill;
 
@@ -148,10 +161,13 @@ namespace screentimebreak {
         }
 
         private void applySettings() {
+            // TODO: Add error handling + prompt when invalid values are entered
             Properties.Settings.Default.ScreenTimeMinutes = Convert.ToInt32(screenTimeMinutesInput.Text);
             Properties.Settings.Default.ScreenTimeSeconds = Convert.ToInt32(screenTimeSecondsInput.Text);
             Properties.Settings.Default.BreakTimeMinutes = Convert.ToInt32(breakMinutesInput.Text);
             Properties.Settings.Default.BreakTimeSeconds = Convert.ToInt32(breakSecondsInput.Text);
+            Properties.Settings.Default.MegaBreakTimeMinutes = Convert.ToInt32(megaBreakMinutesInput.Text);
+            Properties.Settings.Default.MegaBreakTimeSeconds = Convert.ToInt32(megaBreakSecondsInput.Text);
             Properties.Settings.Default.MegaBreaksEnabled = megaBreaksCheckbox.Checked;
             Properties.Settings.Default.Save();
         }
