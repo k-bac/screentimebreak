@@ -11,7 +11,9 @@ namespace screentimebreak {
 
         // Buttons
         private Button okButton;
+        private Button applyButton;
         private Button cancelButton;
+
 
         // Text labels
         private Label screenTime;
@@ -35,7 +37,7 @@ namespace screentimebreak {
         private TabControl tabControl;
 
         public SettingsForm() {
-            Size = new Size(500, 400);
+            Size = new Size(360, 400);
             Visible = true;
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Text = "Settings";
@@ -44,6 +46,7 @@ namespace screentimebreak {
         }
 
         private void addComponents() {
+            // Buttons
             okButton = new Button();
             okButton.Text = "OK";
             okButton.Location = new Point(15, 330);
@@ -51,8 +54,13 @@ namespace screentimebreak {
 
             cancelButton = new Button();
             cancelButton.Text = "Cancel";
-            cancelButton.Location = new Point(95, 330);
+            cancelButton.Location = new Point(175, 330);
             cancelButton.Click += new EventHandler(cancelButton_Click);
+
+            applyButton = new Button();
+            applyButton.Text = "Apply";
+            applyButton.Location = new Point(95, 330);
+            applyButton.Click += new EventHandler(applyButton_Click);
 
             // Screen time
 
@@ -159,6 +167,7 @@ namespace screentimebreak {
             tabControl.Dock = DockStyle.Fill;
 
             Controls.Add(okButton);
+            Controls.Add(applyButton);
             Controls.Add(cancelButton);
             Controls.Add(tabControl);
         }
