@@ -23,6 +23,7 @@ namespace screentimebreak {
         private SettingsLabel breakSecondsLabel;
         private SettingsLabel breakMinutesLabel;
         private SettingsLabel megaBreaksEnableLabel;
+        private SettingsLabel breaksBeforeMegaBreakLabel;
         private SettingsLabel megaBreaksLabel;
         private SettingsLabel megaBreakMinutesLabel;
         private SettingsLabel megaBreakSecondsLabel;
@@ -33,6 +34,7 @@ namespace screentimebreak {
         private SettingsTimeInputField breakMinutesInput;
         private SettingsTimeInputField breakSecondsInput;
         private CheckBox megaBreaksCheckbox;
+        private TextBox breaksBeforeMegaBreakInput;
         private SettingsTimeInputField megaBreakMinutesInput;
         private SettingsTimeInputField megaBreakSecondsInput;
 
@@ -42,7 +44,7 @@ namespace screentimebreak {
         private TabControl tabControl;
 
         public SettingsForm() {
-            Size = new Size(360, 400);
+            Size = new Size(360, 345);
             Visible = true;
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Text = "Settings";
@@ -53,17 +55,17 @@ namespace screentimebreak {
             // Buttons
             okButton = new Button();
             okButton.Text = "OK";
-            okButton.Location = new Point(15, 330);
+            okButton.Location = new Point(15, 275);
             okButton.Click += new EventHandler(okButton_Click);
 
             cancelButton = new Button();
             cancelButton.Text = "Cancel";
-            cancelButton.Location = new Point(175, 330);
+            cancelButton.Location = new Point(175, 275);
             cancelButton.Click += new EventHandler(cancelButton_Click);
 
             applyButton = new Button();
             applyButton.Text = "Apply";
-            applyButton.Location = new Point(95, 330);
+            applyButton.Location = new Point(95, 275);
             applyButton.Click += new EventHandler(applyButton_Click);
 
             // Screen time
@@ -90,19 +92,32 @@ namespace screentimebreak {
 
             // Megabreaks
             megaBreaksEnableLabel = new SettingsLabel(new Point(0, 100), "Enable megabreaks");
-            megaBreaksLabel = new SettingsLabel(new Point(0, 150), "Megabreaks");
-            megaBreakMinutesInput = new SettingsTimeInputField(new Point(75, 150));
-            megaBreakMinutesInput.Text = Properties.Settings.Default.MegaBreakTimeMinutes.ToString();
-
-            megaBreakSecondsInput = new SettingsTimeInputField(new Point(75, 180));
-            megaBreakSecondsInput.Text = Properties.Settings.Default.MegaBreakTimeSeconds.ToString();
-
-            megaBreakMinutesLabel = new SettingsLabel(new Point(105, 150), "minutes");
-            megaBreakSecondsLabel = new SettingsLabel(new Point(105, 185), "seconds");
 
             megaBreaksCheckbox = new CheckBox();
             megaBreaksCheckbox.Location = new Point(120, 100);
             megaBreaksCheckbox.Checked = Properties.Settings.Default.MegaBreaksEnabled;
+            megaBreaksCheckbox.Click += new EventHandler(megaBreaksCheckbox_Click);
+
+            breaksBeforeMegaBreakLabel = new SettingsLabel(new Point(0, 130), "Breaks before megabreak");
+
+            // Normal textbox for now
+            breaksBeforeMegaBreakInput = new TextBox();
+            breaksBeforeMegaBreakInput.Location = new Point(150, 130);
+            breaksBeforeMegaBreakInput.Size = new Size(25, 10);
+            breaksBeforeMegaBreakInput.Text = Properties.Settings.Default.BreaksBeforeMegaBreak.ToString();
+
+            megaBreaksLabel = new SettingsLabel(new Point(0, 160), "Megabreaks");
+            megaBreakMinutesInput = new SettingsTimeInputField(new Point(75, 160));
+            megaBreakMinutesInput.Text = Properties.Settings.Default.MegaBreakTimeMinutes.ToString();
+
+            megaBreakSecondsInput = new SettingsTimeInputField(new Point(75, 190));
+            megaBreakSecondsInput.Text = Properties.Settings.Default.MegaBreakTimeSeconds.ToString();
+
+            megaBreakMinutesLabel = new SettingsLabel(new Point(105, 160), "minutes");
+            megaBreakSecondsLabel = new SettingsLabel(new Point(105, 190), "seconds");
+
+            // Fields toggled once here to prevent editing when megabreaks are disabled (when checkbox hasn't been clicked yet)
+            toggleMegaBreakFields();
 
             // Tab 1 (Timers)
             timersTabPage = new TabPage();
@@ -124,6 +139,8 @@ namespace screentimebreak {
             timersTabPage.Controls.Add(megaBreaksEnableLabel);
             timersTabPage.Controls.Add(megaBreaksLabel);
             timersTabPage.Controls.Add(megaBreaksCheckbox);
+            timersTabPage.Controls.Add(breaksBeforeMegaBreakLabel);
+            timersTabPage.Controls.Add(breaksBeforeMegaBreakInput);
             timersTabPage.Controls.Add(megaBreakMinutesLabel);
             timersTabPage.Controls.Add(megaBreakMinutesInput);
             timersTabPage.Controls.Add(megaBreakSecondsLabel);
@@ -160,6 +177,10 @@ namespace screentimebreak {
             Close();
         }
 
+        private void megaBreaksCheckbox_Click(object sender, EventArgs e) {
+            toggleMegaBreakFields();
+        }
+
         private void applySettings() {
             // TODO: Add error handling + prompt when invalid values are entered
             Properties.Settings.Default.ScreenTimeMinutes = Convert.ToInt32(screenTimeMinutesInput.Text);
@@ -169,7 +190,21 @@ namespace screentimebreak {
             Properties.Settings.Default.MegaBreakTimeMinutes = Convert.ToInt32(megaBreakMinutesInput.Text);
             Properties.Settings.Default.MegaBreakTimeSeconds = Convert.ToInt32(megaBreakSecondsInput.Text);
             Properties.Settings.Default.MegaBreaksEnabled = megaBreaksCheckbox.Checked;
+            Properties.Settings.Default.BreaksBeforeMegaBreak = Convert.ToInt32(breaksBeforeMegaBreakInput.Text);
             Properties.Settings.Default.Save();
+        }
+
+        private void toggleMegaBreakFields() {
+            if (!megaBreaksCheckbox.Checked) {
+                megaBreakMinutesInput.Enabled = false;
+                megaBreakSecondsInput.Enabled = false;
+                breaksBeforeMegaBreakInput.Enabled = false;
+            }
+            else {
+                megaBreakMinutesInput.Enabled = true;
+                megaBreakSecondsInput.Enabled = true;
+                breaksBeforeMegaBreakInput.Enabled = true;
+            }
         }
     }
 }

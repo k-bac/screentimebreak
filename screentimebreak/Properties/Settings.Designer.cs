@@ -106,5 +106,17 @@ namespace screentimebreak.Properties {
                 this["MegaBreaksEnabled"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("4")]
+        public int BreaksBeforeMegaBreak {
+            get {
+                return ((int)(this["BreaksBeforeMegaBreak"]));
+            }
+            set {
+                this["BreaksBeforeMegaBreak"] = value;
+            }
+        }
     }
 }
