@@ -14,7 +14,6 @@ namespace screentimebreak {
         private Button applyButton;
         private Button cancelButton;
 
-
         // Text labels
         private SettingsLabel screenTimeLabel;
         private SettingsLabel screenTimeSecondsLabel;
@@ -29,14 +28,14 @@ namespace screentimebreak {
         private SettingsLabel megaBreakSecondsLabel;
 
         // Value fields
-        private SettingsTimeInputField screenTimeMinutesInput;
-        private SettingsTimeInputField screenTimeSecondsInput;
-        private SettingsTimeInputField breakMinutesInput;
-        private SettingsTimeInputField breakSecondsInput;
+        private SettingsField screenTimeMinutesInput;
+        private SettingsField screenTimeSecondsInput;
+        private SettingsField breakMinutesInput;
+        private SettingsField breakSecondsInput;
         private CheckBox megaBreaksCheckbox;
-        private TextBox breaksBeforeMegaBreakInput;
-        private SettingsTimeInputField megaBreakMinutesInput;
-        private SettingsTimeInputField megaBreakSecondsInput;
+        private SettingsField breaksBeforeMegaBreakInput;
+        private SettingsField megaBreakMinutesInput;
+        private SettingsField megaBreakSecondsInput;
 
         // Tabs + TabControl
         private TabPage timersTabPage;
@@ -48,6 +47,7 @@ namespace screentimebreak {
             Visible = true;
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Text = "Settings";
+            MaximizeBox = false;
             addComponents();
         }
 
@@ -70,10 +70,10 @@ namespace screentimebreak {
 
             // Screen time
             screenTimeLabel = new SettingsLabel(new Point(0, 20), "Screen time");
-            screenTimeMinutesInput = new SettingsTimeInputField(new Point(75, 20));
+            screenTimeMinutesInput = new SettingsField(FieldType.TimeField, new Point(75, 20));
             screenTimeMinutesInput.Text = Properties.Settings.Default.ScreenTimeMinutes.ToString();
 
-            screenTimeSecondsInput = new SettingsTimeInputField(new Point(75, 50));
+            screenTimeSecondsInput = new SettingsField(FieldType.TimeField, new Point(75, 50));
             screenTimeSecondsInput.Text = Properties.Settings.Default.ScreenTimeSeconds.ToString();
 
             screenTimeMinutesLabel = new SettingsLabel(new Point(105, 20), "minutes");
@@ -81,10 +81,10 @@ namespace screentimebreak {
 
             // Breaks
             breakTimeLabel = new SettingsLabel(new Point(175, 20), "Break time");
-            breakMinutesInput = new SettingsTimeInputField(new Point(250, 20));
+            breakMinutesInput = new SettingsField(FieldType.TimeField, new Point(250, 20));
             breakMinutesInput.Text = Properties.Settings.Default.BreakTimeMinutes.ToString();
 
-            breakSecondsInput = new SettingsTimeInputField(new Point(250, 50));
+            breakSecondsInput = new SettingsField(FieldType.TimeField, new Point(250, 50));
             breakSecondsInput.Text = Properties.Settings.Default.BreakTimeSeconds.ToString();
 
             breakMinutesLabel = new SettingsLabel(new Point(280, 20), "minutes");
@@ -100,17 +100,14 @@ namespace screentimebreak {
 
             breaksBeforeMegaBreakLabel = new SettingsLabel(new Point(0, 130), "Breaks before megabreak");
 
-            // Normal textbox for now
-            breaksBeforeMegaBreakInput = new TextBox();
-            breaksBeforeMegaBreakInput.Location = new Point(150, 130);
-            breaksBeforeMegaBreakInput.Size = new Size(25, 10);
+            breaksBeforeMegaBreakInput = new SettingsField(FieldType.IntegerNumberField, new Point(150, 130));
             breaksBeforeMegaBreakInput.Text = Properties.Settings.Default.BreaksBeforeMegaBreak.ToString();
 
             megaBreaksLabel = new SettingsLabel(new Point(0, 160), "Megabreaks");
-            megaBreakMinutesInput = new SettingsTimeInputField(new Point(75, 160));
+            megaBreakMinutesInput = new SettingsField(FieldType.TimeField, new Point(75, 160));
             megaBreakMinutesInput.Text = Properties.Settings.Default.MegaBreakTimeMinutes.ToString();
 
-            megaBreakSecondsInput = new SettingsTimeInputField(new Point(75, 190));
+            megaBreakSecondsInput = new SettingsField(FieldType.TimeField, new Point(75, 190));
             megaBreakSecondsInput.Text = Properties.Settings.Default.MegaBreakTimeSeconds.ToString();
 
             megaBreakMinutesLabel = new SettingsLabel(new Point(105, 160), "minutes");

@@ -7,11 +7,16 @@ using System.Windows.Forms;
 using System.Drawing;
 
 namespace screentimebreak {
-    class SettingsTimeInputField : TextBox {
-        public SettingsTimeInputField(Point point) : base() {
+    class SettingsField : TextBox {
+        public SettingsField(FieldType fieldType, Point point) : base() {
             MaxLength = 2;
             Size = new Size(25, 10);
             Location = point;
         }
+    }
+    public enum FieldType {
+        TimeField,
+        IntegerNumberField,
+        FloatNumberField
     }
 }
