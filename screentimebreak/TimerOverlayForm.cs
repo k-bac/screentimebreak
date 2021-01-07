@@ -26,7 +26,7 @@ namespace screentimebreak {
         private int breakCount = 0;
         private int breaksBeforeMega = 5;
         private bool megaBreaksEnabled;
-        private Label screenTimeLabel;
+        private static Label screenTimeLabel;
         private Label breakTimeLabel;
 
         private TrayMenu trayMenu;
@@ -45,7 +45,7 @@ namespace screentimebreak {
             // Labels
             screenTimeLabel = new CountdownLabel(15);
             screenTimeLabel.Location = new Point(1600, 5);
-            screenTimeLabel.Visible = true;
+            screenTimeLabel.Visible = Properties.Settings.Default.ShowScreenTimer;
 
             breakTimeLabel = new CountdownLabel(50);
             breakTimeLabel.Location = new Point(500, 500);
@@ -224,6 +224,8 @@ namespace screentimebreak {
                 }
             }
         }
-
+        public static Label getScreenTimeLabel() {
+            return screenTimeLabel;
+        }
     }
 }

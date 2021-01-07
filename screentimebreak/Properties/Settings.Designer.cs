@@ -118,5 +118,17 @@ namespace screentimebreak.Properties {
                 this["BreaksBeforeMegaBreak"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ShowScreenTimer {
+            get {
+                return ((bool)(this["ShowScreenTimer"]));
+            }
+            set {
+                this["ShowScreenTimer"] = value;
+            }
+        }
     }
 }

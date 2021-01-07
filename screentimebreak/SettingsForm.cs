@@ -26,6 +26,7 @@ namespace screentimebreak {
         private SettingsLabel megaBreaksLabel;
         private SettingsLabel megaBreakMinutesLabel;
         private SettingsLabel megaBreakSecondsLabel;
+        private SettingsLabel showScreenTimerLabel;
 
         // Value fields
         private SettingsField screenTimeMinutesInput;
@@ -36,6 +37,7 @@ namespace screentimebreak {
         private SettingsField breaksBeforeMegaBreakInput;
         private SettingsField megaBreakMinutesInput;
         private SettingsField megaBreakSecondsInput;
+        private CheckBox showScreenTimerCheckBox;
 
         // Tabs + TabControl
         private TabPage timersTabPage;
@@ -116,6 +118,12 @@ namespace screentimebreak {
             // Fields toggled once here to prevent editing when megabreaks are disabled (when checkbox hasn't been clicked yet)
             toggleMegaBreakFields();
 
+            // Interface options
+            showScreenTimerCheckBox = new CheckBox();
+            showScreenTimerCheckBox.Location = new Point(125, 20);
+            showScreenTimerCheckBox.Checked = Properties.Settings.Default.ShowScreenTimer;
+            showScreenTimerLabel = new SettingsLabel(new Point(0, 20), "Show screen timer");
+
             // Tab 1 (Timers)
             timersTabPage = new TabPage();
             timersTabPage.Text = "Timers";
@@ -148,6 +156,10 @@ namespace screentimebreak {
             interfaceTabPage.Text = "Interface";
             interfaceTabPage.TabIndex = 1;
 
+            interfaceTabPage.Controls.Add(showScreenTimerLabel);
+            interfaceTabPage.Controls.Add(showScreenTimerCheckBox);
+
+            // Tab control
             tabControl = new TabControl();
 
             tabControl.Controls.Add(timersTabPage);
@@ -188,7 +200,9 @@ namespace screentimebreak {
             Properties.Settings.Default.MegaBreakTimeSeconds = Convert.ToInt32(megaBreakSecondsInput.Text);
             Properties.Settings.Default.MegaBreaksEnabled = megaBreaksCheckbox.Checked;
             Properties.Settings.Default.BreaksBeforeMegaBreak = Convert.ToInt32(breaksBeforeMegaBreakInput.Text);
+            Properties.Settings.Default.ShowScreenTimer = showScreenTimerCheckBox.Checked;
             Properties.Settings.Default.Save();
+            TimerOverlayForm.getScreenTimeLabel().Visible = Properties.Settings.Default.ShowScreenTimer;
         }
 
         private void toggleMegaBreakFields() {
