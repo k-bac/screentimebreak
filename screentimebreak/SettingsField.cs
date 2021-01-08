@@ -16,7 +16,6 @@ namespace screentimebreak {
     }
     public enum FieldType {
         TimeField,
-        IntegerNumberField,
-        FloatNumberField
+        IntegerNumberField
     }
 }

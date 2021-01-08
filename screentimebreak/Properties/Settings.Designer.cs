@@ -130,5 +130,17 @@ namespace screentimebreak.Properties {
                 this["ShowScreenTimer"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("White")]
+        public global::System.Drawing.Color ScreenTimerColor {
+            get {
+                return ((global::System.Drawing.Color)(this["ScreenTimerColor"]));
+            }
+            set {
+                this["ScreenTimerColor"] = value;
+            }
+        }
     }
 }

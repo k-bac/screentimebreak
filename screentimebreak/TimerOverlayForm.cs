@@ -16,7 +16,7 @@ namespace screentimebreak {
 
         [DllImport("user32.dll")]
         static extern int GetWindowLong(IntPtr hWnd, int nIndex);
-
+        private float breakScreenOpacity;
         private int screenTimeMinutes;
         private int screenTimeSeconds;
         private int breakTimeMinutes;
@@ -25,15 +25,17 @@ namespace screentimebreak {
         private int megaBreakTimeSeconds;
         private int breakCount = 0;
         private int breaksBeforeMega = 5;
+
         private bool megaBreaksEnabled;
-        private static Label screenTimeLabel;
-        private Label breakTimeLabel;
+        private static CountdownLabel screenTimeLabel;
+        private CountdownLabel breakTimeLabel;
 
         private TrayMenu trayMenu;
 
 
         public TimerOverlayForm() {
 
+            this.breakScreenOpacity = 0.70f;
             this.screenTimeMinutes = Properties.Settings.Default.ScreenTimeMinutes;
             this.screenTimeSeconds = Properties.Settings.Default.ScreenTimeSeconds;
             this.breakTimeMinutes = Properties.Settings.Default.BreakTimeMinutes;
@@ -45,6 +47,7 @@ namespace screentimebreak {
             // Labels
             screenTimeLabel = new CountdownLabel(15);
             screenTimeLabel.Location = new Point(1600, 5);
+            screenTimeLabel.ForeColor = Properties.Settings.Default.ScreenTimerColor;
             screenTimeLabel.Visible = Properties.Settings.Default.ShowScreenTimer;
 
             breakTimeLabel = new CountdownLabel(50);
@@ -58,7 +61,6 @@ namespace screentimebreak {
 
             // Visual properties
             FormBorderStyle = FormBorderStyle.None;
-            Opacity = 0.70;
             BackColor = Color.Black;
             TransparencyKey = BackColor;
             TopMost = true;
@@ -179,12 +181,10 @@ namespace screentimebreak {
                     breakCount++;
                     totalCountdownTimeLeft = breakTime;
                 }
-                
-
             }
 
             void fadeIntoBlack() {
-                double originalOpacity = Opacity;
+                double maxOpacity = breakScreenOpacity;
                 Opacity = 0.00;
                 Timer fadeInTimer = new Timer();
                 fadeInTimer.Interval = 10;
@@ -195,7 +195,7 @@ namespace screentimebreak {
                 TransparencyKey = Color.Magenta;
 
                 void fadeInTimer_Tick(object sender, EventArgs e) {
-                    if (Opacity < originalOpacity) {
+                    if (Opacity < maxOpacity) {
                         Opacity += 0.02;
                     }
                     else {
@@ -217,7 +217,7 @@ namespace screentimebreak {
                     }
                     else {
                         TransparencyKey = BackColor;
-                        Opacity = 0.70;
+                        Opacity = 1.0;
                         fadeOutTimer.Enabled = false;
                         screenTimeLabel.Visible = true;
                     }
