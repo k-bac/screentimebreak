@@ -143,7 +143,6 @@ namespace screentimebreak {
             selectedScreenTimeColorLabel.Size = new Size(15, 15);
             selectedScreenTimeColorLabel.BorderStyle = BorderStyle.Fixed3D;
             selectedScreenTimeColorLabel.BackColor = Properties.Settings.Default.ScreenTimerColor;
-            Console.WriteLine("ASD" + selectedScreenTimeColorLabel.BackColor);
 
             // Tab 1 (Timers)
             timersTabPage = new TabPage();

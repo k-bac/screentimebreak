@@ -27,8 +27,8 @@ namespace screentimebreak {
         private int breaksBeforeMega = 5;
 
         private bool megaBreaksEnabled;
-        private static CountdownLabel screenTimeLabel;
-        private CountdownLabel breakTimeLabel;
+        private static Label screenTimeLabel;
+        private Label breakTimeLabel;
 
         private TrayMenu trayMenu;
 
@@ -45,14 +45,19 @@ namespace screentimebreak {
             this.megaBreaksEnabled = Properties.Settings.Default.MegaBreaksEnabled;
 
             // Labels
-            screenTimeLabel = new CountdownLabel(15);
+            screenTimeLabel = new Label();
+            screenTimeLabel.Font = new Font("Calibri", 15);
             screenTimeLabel.Location = new Point(1600, 5);
             screenTimeLabel.ForeColor = Properties.Settings.Default.ScreenTimerColor;
             screenTimeLabel.Visible = Properties.Settings.Default.ShowScreenTimer;
+            screenTimeLabel.AutoSize = true;
 
-            breakTimeLabel = new CountdownLabel(50);
+            breakTimeLabel = new Label();
+            breakTimeLabel.Font = new Font("Calibri", 50);
+            breakTimeLabel.ForeColor = Color.White;
             breakTimeLabel.Location = new Point(500, 500);
             breakTimeLabel.Visible = false;
+            breakTimeLabel.AutoSize = true;
 
             Controls.Add(screenTimeLabel);
             Controls.Add(breakTimeLabel);
