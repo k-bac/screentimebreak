@@ -230,7 +230,9 @@ namespace screentimebreak {
             Properties.Settings.Default.ShowScreenTimer = showScreenTimerCheckBox.Checked;
             Properties.Settings.Default.ScreenTimerColor = selectedScreenTimeColorLabel.BackColor;
             Properties.Settings.Default.Save();
-            TimerOverlayForm.getScreenTimeLabel().Visible = Properties.Settings.Default.ShowScreenTimer;
+            if (TimerOverlayForm.getScreenMode()) {
+                TimerOverlayForm.getScreenTimeLabel().Visible = Properties.Settings.Default.ShowScreenTimer;
+            }
             TimerOverlayForm.getScreenTimeLabel().ForeColor = Properties.Settings.Default.ScreenTimerColor;
         }
 

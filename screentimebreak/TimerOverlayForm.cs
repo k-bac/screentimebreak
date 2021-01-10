@@ -26,7 +26,9 @@ namespace screentimebreak {
         private int breakCount = 0;
         private int breaksBeforeMega = 5;
 
+        private static bool screenMode;
         private bool megaBreaksEnabled;
+        private bool megaBreak;
         private static Label screenTimeLabel;
         private Label breakTimeLabel;
 
@@ -118,8 +120,8 @@ namespace screentimebreak {
             int countdownMinutesLeft;
             int countdownSecondsLeft;
 
-            bool screenMode = true;
-            bool megaBreak = false;
+            screenMode = true;
+            megaBreak = false;
 
             Timer countdownTimer = new Timer();
             countdownTimer.Interval = 1000;
@@ -175,7 +177,9 @@ namespace screentimebreak {
                 
                 screenMode = false;
                 fadeIntoBlack();
-                screenTimeLabel.Visible = false;
+                if (Properties.Settings.Default.ShowScreenTimer) {
+                    screenTimeLabel.Visible = false;
+                }
                 breakTimeLabel.Visible = true;
 
                 if (megaBreak) {
@@ -224,13 +228,19 @@ namespace screentimebreak {
                         TransparencyKey = BackColor;
                         Opacity = 1.0;
                         fadeOutTimer.Enabled = false;
-                        screenTimeLabel.Visible = true;
+                        if (Properties.Settings.Default.ShowScreenTimer) {
+                            screenTimeLabel.Visible = true;
+                        }
                     }
                 }
             }
         }
         public static Label getScreenTimeLabel() {
             return screenTimeLabel;
+        }
+
+        public static bool getScreenMode() {
+            return screenMode;
         }
     }
 }
