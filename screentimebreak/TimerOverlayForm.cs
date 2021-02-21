@@ -168,13 +168,15 @@ namespace screentimebreak {
             }
 
             void enterBreakMode() {
-                if (breakCount == breaksBeforeMega) {
-                    megaBreak = true;
+                if (megaBreaksEnabled) {
+                    if (breakCount == breaksBeforeMega) {
+                        megaBreak = true;
+                    }
                 }
                 else {
                     megaBreak = false;
                 }
-                
+
                 screenMode = false;
                 fadeIntoBlack();
                 if (Properties.Settings.Default.ShowScreenTimer) {
