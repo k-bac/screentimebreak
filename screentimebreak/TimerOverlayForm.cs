@@ -24,7 +24,7 @@ namespace screentimebreak {
         private int megaBreakTimeMinutes;
         private int megaBreakTimeSeconds;
         private int breakCount = 0;
-        private int breaksBeforeMega = 5;
+        private int breaksBeforeMega;
 
         private static bool screenMode;
         private bool megaBreaksEnabled;
@@ -45,6 +45,7 @@ namespace screentimebreak {
             this.megaBreakTimeMinutes = Properties.Settings.Default.MegaBreakTimeMinutes;
             this.megaBreakTimeSeconds = Properties.Settings.Default.MegaBreakTimeSeconds;
             this.megaBreaksEnabled = Properties.Settings.Default.MegaBreaksEnabled;
+            this.breaksBeforeMega = Properties.Settings.Default.BreaksBeforeMegaBreak;
 
             // Labels
             screenTimeLabel = new Label();
@@ -171,6 +172,9 @@ namespace screentimebreak {
                 if (megaBreaksEnabled) {
                     if (breakCount == breaksBeforeMega) {
                         megaBreak = true;
+                    }
+                    else {
+                        megaBreak = false;
                     }
                 }
                 else {
