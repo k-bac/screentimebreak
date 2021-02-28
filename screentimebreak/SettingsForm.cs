@@ -197,8 +197,9 @@ namespace screentimebreak {
         }
 
         private void okButton_Click(object sender, EventArgs e) {
-            applySettings();
-            Close();
+            if (applySettings() == true) {
+                Close();
+            } 
         }
 
         private void applyButton_Click(object sender, EventArgs e) {
@@ -217,23 +218,60 @@ namespace screentimebreak {
             openScreenTimerColorPicker();
         }
 
-        private void applySettings() {
-            // TODO: Add error handling + prompt when invalid values are entered
-            Properties.Settings.Default.ScreenTimeMinutes = Convert.ToInt32(screenTimeMinutesInput.Text);
-            Properties.Settings.Default.ScreenTimeSeconds = Convert.ToInt32(screenTimeSecondsInput.Text);
-            Properties.Settings.Default.BreakTimeMinutes = Convert.ToInt32(breakMinutesInput.Text);
-            Properties.Settings.Default.BreakTimeSeconds = Convert.ToInt32(breakSecondsInput.Text);
-            Properties.Settings.Default.MegaBreakTimeMinutes = Convert.ToInt32(megaBreakMinutesInput.Text);
-            Properties.Settings.Default.MegaBreakTimeSeconds = Convert.ToInt32(megaBreakSecondsInput.Text);
-            Properties.Settings.Default.MegaBreaksEnabled = megaBreaksCheckbox.Checked;
-            Properties.Settings.Default.BreaksBeforeMegaBreak = Convert.ToInt32(breaksBeforeMegaBreakInput.Text);
-            Properties.Settings.Default.ShowScreenTimer = showScreenTimerCheckBox.Checked;
-            Properties.Settings.Default.ScreenTimerColor = selectedScreenTimeColorLabel.BackColor;
-            Properties.Settings.Default.Save();
-            if (TimerOverlayForm.getScreenMode()) {
-                TimerOverlayForm.getScreenTimeLabel().Visible = Properties.Settings.Default.ShowScreenTimer;
+        private bool applySettings() {
+            try {
+                int screenTimeMinutes = Convert.ToInt32(screenTimeMinutesInput.Text);
+                int screenTimeSeconds = Convert.ToInt32(screenTimeSecondsInput.Text);
+                int breakTimeMinutes = Convert.ToInt32(breakMinutesInput.Text);
+                int breakTimeSeconds = Convert.ToInt32(breakSecondsInput.Text);
+                int megabreakMinutes = Convert.ToInt32(megaBreakMinutesInput.Text);
+                int megabreakSeconds = Convert.ToInt32(megaBreakSecondsInput.Text);
+                int breaksBeforeMega = Convert.ToInt32(breaksBeforeMegaBreakInput.Text);
+                int[][] timeValueArrays = {
+                    new int[] { screenTimeSeconds, screenTimeMinutes },
+                    new int[] { breakTimeMinutes, breakTimeSeconds }, 
+                    new int[] { megabreakMinutes, megabreakSeconds }
+                };
+                foreach (int[] timeValueArray in timeValueArrays) {
+                    int timeValueSum = 0;
+                    foreach (int timeValue in timeValueArray) {
+                        timeValueSum += timeValue;
+                        if (timeValue < 0 || timeValue > 59) {
+                            throw new InvalidSettingValueException("Minutes and seconds must be values between 0 and 59.");
+                        }
+                    }
+                    if (timeValueSum == 0) {
+                        throw new InvalidSettingValueException("Both minutes and seconds cannot be 0.");
+                    }
+                }
+                if (breaksBeforeMega <= 1 || breaksBeforeMega > 10) {
+                    throw new InvalidSettingValueException("Breaks between megabreaks must be a value between 1 and 10.");
+                }
+                Properties.Settings.Default.ScreenTimeMinutes = screenTimeMinutes;
+                Properties.Settings.Default.ScreenTimeSeconds = screenTimeSeconds;
+                Properties.Settings.Default.BreakTimeMinutes = breakTimeMinutes;
+                Properties.Settings.Default.BreakTimeSeconds = breakTimeSeconds;
+                Properties.Settings.Default.MegaBreakTimeMinutes = megabreakMinutes;
+                Properties.Settings.Default.MegaBreakTimeSeconds = megabreakSeconds;
+                Properties.Settings.Default.BreaksBeforeMegaBreak = breaksBeforeMega;
+                Properties.Settings.Default.MegaBreaksEnabled = megaBreaksCheckbox.Checked;
+                Properties.Settings.Default.ShowScreenTimer = showScreenTimerCheckBox.Checked;
+                Properties.Settings.Default.ScreenTimerColor = selectedScreenTimeColorLabel.BackColor;
+                Properties.Settings.Default.Save();
+                if (TimerOverlayForm.getScreenMode()) {
+                    TimerOverlayForm.getScreenTimeLabel().Visible = Properties.Settings.Default.ShowScreenTimer;
+                }
+                TimerOverlayForm.getScreenTimeLabel().ForeColor = Properties.Settings.Default.ScreenTimerColor;
             }
-            TimerOverlayForm.getScreenTimeLabel().ForeColor = Properties.Settings.Default.ScreenTimerColor;
+            catch (FormatException) {
+                MessageBox.Show("All values must be numerical.", "Input error");
+                return false;
+            }
+            catch (InvalidSettingValueException e) {
+                MessageBox.Show(e.Message, "Input error");
+                return false;
+            }
+            return true;
         }
 
         private void toggleMegaBreakFields() {
