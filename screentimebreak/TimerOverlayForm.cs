@@ -11,11 +11,16 @@ using System.Windows.Forms;
 
 namespace screentimebreak {
     public partial class TimerOverlayForm : Form {
+        [DllImport("user32.dll", SetLastError = true)]
+        static extern int GetWindowLong(IntPtr hWnd, int nIndex);
+
         [DllImport("user32.dll")]
         static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
 
-        [DllImport("user32.dll")]
-        static extern int GetWindowLong(IntPtr hWnd, int nIndex);
+        const int GWL_EXSTYLE = -20;
+        const int WS_EX_LAYERED = 0x80000;
+        const int WS_EX_TRANSPARENT = 0x20;
+
         private float breakScreenOpacity;
         private int screenTimeMinutes;
         private int screenTimeSeconds;
@@ -32,20 +37,17 @@ namespace screentimebreak {
         private static Label screenTimeLabel;
         private Label breakTimeLabel;
 
-        private TrayMenu trayMenu;
-
-
         public TimerOverlayForm() {
 
-            this.breakScreenOpacity = 0.70f;
-            this.screenTimeMinutes = Properties.Settings.Default.ScreenTimeMinutes;
-            this.screenTimeSeconds = Properties.Settings.Default.ScreenTimeSeconds;
-            this.breakTimeMinutes = Properties.Settings.Default.BreakTimeMinutes;
-            this.breakTimeSeconds = Properties.Settings.Default.BreakTimeSeconds;
-            this.megaBreakTimeMinutes = Properties.Settings.Default.MegaBreakTimeMinutes;
-            this.megaBreakTimeSeconds = Properties.Settings.Default.MegaBreakTimeSeconds;
-            this.megaBreaksEnabled = Properties.Settings.Default.MegaBreaksEnabled;
-            this.breaksBeforeMega = Properties.Settings.Default.BreaksBeforeMegaBreak;
+            breakScreenOpacity = 0.70f;
+            screenTimeMinutes = Properties.Settings.Default.ScreenTimeMinutes;
+            screenTimeSeconds = Properties.Settings.Default.ScreenTimeSeconds;
+            breakTimeMinutes = Properties.Settings.Default.BreakTimeMinutes;
+            breakTimeSeconds = Properties.Settings.Default.BreakTimeSeconds;
+            megaBreakTimeMinutes = Properties.Settings.Default.MegaBreakTimeMinutes;
+            megaBreakTimeSeconds = Properties.Settings.Default.MegaBreakTimeSeconds;
+            megaBreaksEnabled = Properties.Settings.Default.MegaBreaksEnabled;
+            breaksBeforeMega = Properties.Settings.Default.BreaksBeforeMegaBreak;
 
             // Labels
             screenTimeLabel = new Label();
@@ -75,13 +77,16 @@ namespace screentimebreak {
 
             setSizeToAllScreens();
 
-            // Enable clicking through the form
-            int initialStyle = GetWindowLong(this.Handle, -20);
-            SetWindowLong(this.Handle, -20, initialStyle | 0x80000 | 0x20);
-
             // Call function TimerOverlayForm_Load on form load
             Load += new EventHandler(TimerOverlayForm_Load);
 
+        }
+
+        protected override void OnLoad(EventArgs e) {
+            base.OnLoad(e);
+            // Enable clicking through the form
+            var initialStyle = GetWindowLong(this.Handle, GWL_EXSTYLE);
+            SetWindowLong(this.Handle, GWL_EXSTYLE, initialStyle | WS_EX_LAYERED| WS_EX_TRANSPARENT);
         }
 
         // Set the form's size to cover all screens
@@ -104,7 +109,7 @@ namespace screentimebreak {
         private void TimerOverlayForm_Load(object sender, EventArgs e) {
 
             // Maybe put these in their own class?
-            trayMenu = new TrayMenu(this);
+            TrayMenu trayMenu = new TrayMenu(this);
             startMainLoop();
         }
 
