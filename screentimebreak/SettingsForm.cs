@@ -1,33 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.Drawing;
+using System.Windows.Forms;
 
 namespace screentimebreak {
     public partial class SettingsForm : Form {
 
-        // Main buttons
-        private Button okButton;
-        private Button applyButton;
-        private Button cancelButton;
+        private TimerOverlayForm timerOverlayForm;
 
-        // Text labels
-        private SettingsLabel screenTimeLabel;
-        private SettingsLabel screenTimeSecondsLabel;
-        private SettingsLabel screenTimeMinutesLabel;
-        private SettingsLabel breakTimeLabel;
-        private SettingsLabel breakSecondsLabel;
-        private SettingsLabel breakMinutesLabel;
-        private SettingsLabel megaBreaksEnableLabel;
-        private SettingsLabel breaksBeforeMegaBreakLabel;
-        private SettingsLabel megaBreaksLabel;
-        private SettingsLabel megaBreakMinutesLabel;
-        private SettingsLabel megaBreakSecondsLabel;
-        private SettingsLabel showScreenTimerLabel;
-        private SettingsLabel screenTimerColorLabel;
         private Label selectedScreenTimeColorLabel;
 
         // Value fields + other controls
@@ -41,97 +20,94 @@ namespace screentimebreak {
         private SettingsField megaBreakSecondsInput;
         private CheckBox showScreenTimerCheckBox;
         private ColorDialog screenTimerColorPicker;
-        private Button screenTimerColorPickerButton;
-        // Tabs + TabControl
-        private TabPage timersTabPage;
-        private TabPage interfaceTabPage;
-        private TabControl tabControl;
 
-        public SettingsForm() {
+        public SettingsForm(TimerOverlayForm timerOverlayForm) {
+            this.timerOverlayForm = timerOverlayForm;
+            InitComponents();
+        }
+
+        private void InitComponents() {
             Size = new Size(360, 345);
             Visible = true;
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Text = "Settings";
             MaximizeBox = false;
-            addComponents();
-        }
 
-        private void addComponents() {
             // Main buttons
-            okButton = new Button();
+            Button okButton = new Button();
             okButton.Text = "OK";
             okButton.Location = new Point(15, 275);
             okButton.Click += new EventHandler(okButton_Click);
 
-            cancelButton = new Button();
+            Button cancelButton = new Button();
             cancelButton.Text = "Cancel";
             cancelButton.Location = new Point(175, 275);
             cancelButton.Click += new EventHandler(cancelButton_Click);
 
-            applyButton = new Button();
+            Button applyButton = new Button();
             applyButton.Text = "Apply";
             applyButton.Location = new Point(95, 275);
             applyButton.Click += new EventHandler(applyButton_Click);
 
             // Screen time
-            screenTimeLabel = new SettingsLabel(new Point(0, 20), "Screen time");
+            SettingsLabel screenTimeLabel = new SettingsLabel(new Point(0, 20), "Screen time");
             screenTimeMinutesInput = new SettingsField(FieldType.TimeField, new Point(75, 20));
             screenTimeMinutesInput.Text = Properties.Settings.Default.ScreenTimeMinutes.ToString();
 
             screenTimeSecondsInput = new SettingsField(FieldType.TimeField, new Point(75, 50));
             screenTimeSecondsInput.Text = Properties.Settings.Default.ScreenTimeSeconds.ToString();
 
-            screenTimeMinutesLabel = new SettingsLabel(new Point(105, 20), "minutes");
-            screenTimeSecondsLabel = new SettingsLabel(new Point(105, 50), "seconds");
+            SettingsLabel screenTimeMinutesLabel = new SettingsLabel(new Point(105, 20), "minutes");
+            SettingsLabel screenTimeSecondsLabel = new SettingsLabel(new Point(105, 50), "seconds");
 
             // Breaks
-            breakTimeLabel = new SettingsLabel(new Point(175, 20), "Break time");
+            SettingsLabel breakTimeLabel = new SettingsLabel(new Point(175, 20), "Break time");
             breakMinutesInput = new SettingsField(FieldType.TimeField, new Point(250, 20));
             breakMinutesInput.Text = Properties.Settings.Default.BreakTimeMinutes.ToString();
 
             breakSecondsInput = new SettingsField(FieldType.TimeField, new Point(250, 50));
             breakSecondsInput.Text = Properties.Settings.Default.BreakTimeSeconds.ToString();
 
-            breakMinutesLabel = new SettingsLabel(new Point(280, 20), "minutes");
-            breakSecondsLabel = new SettingsLabel(new Point(280, 50), "seconds");
+            SettingsLabel breakMinutesLabel = new SettingsLabel(new Point(280, 20), "minutes");
+            SettingsLabel breakSecondsLabel = new SettingsLabel(new Point(280, 50), "seconds");
 
             // Megabreaks
-            megaBreaksEnableLabel = new SettingsLabel(new Point(0, 100), "Enable megabreaks");
+            SettingsLabel megaBreaksEnableLabel = new SettingsLabel(new Point(0, 100), "Enable megabreaks");
 
             megaBreaksCheckbox = new CheckBox();
             megaBreaksCheckbox.Location = new Point(120, 100);
             megaBreaksCheckbox.Checked = Properties.Settings.Default.MegaBreaksEnabled;
             megaBreaksCheckbox.Click += new EventHandler(megaBreaksCheckbox_Click);
 
-            breaksBeforeMegaBreakLabel = new SettingsLabel(new Point(0, 130), "Breaks before megabreak");
+            SettingsLabel breaksBeforeMegaBreakLabel = new SettingsLabel(new Point(0, 130), "Breaks before megabreak");
 
             breaksBeforeMegaBreakInput = new SettingsField(FieldType.IntegerNumberField, new Point(150, 130));
             breaksBeforeMegaBreakInput.Text = Properties.Settings.Default.BreaksBeforeMegaBreak.ToString();
 
-            megaBreaksLabel = new SettingsLabel(new Point(0, 160), "Megabreaks");
+            SettingsLabel megaBreaksLabel = new SettingsLabel(new Point(0, 160), "Megabreaks");
             megaBreakMinutesInput = new SettingsField(FieldType.TimeField, new Point(75, 160));
             megaBreakMinutesInput.Text = Properties.Settings.Default.MegaBreakTimeMinutes.ToString();
 
             megaBreakSecondsInput = new SettingsField(FieldType.TimeField, new Point(75, 190));
             megaBreakSecondsInput.Text = Properties.Settings.Default.MegaBreakTimeSeconds.ToString();
 
-            megaBreakMinutesLabel = new SettingsLabel(new Point(105, 160), "minutes");
-            megaBreakSecondsLabel = new SettingsLabel(new Point(105, 190), "seconds");
+            SettingsLabel megaBreakMinutesLabel = new SettingsLabel(new Point(105, 160), "minutes");
+            SettingsLabel megaBreakSecondsLabel = new SettingsLabel(new Point(105, 190), "seconds");
 
             // Fields toggled once here to prevent editing when megabreaks are disabled (when checkbox hasn't been clicked yet)
-            toggleMegaBreakFields();
+            ToggleMegaBreakFields();
 
             // Interface options
-            showScreenTimerLabel = new SettingsLabel(new Point(0, 20), "Show screen timer");
+            SettingsLabel showScreenTimerLabel = new SettingsLabel(new Point(0, 20), "Show screen timer");
             showScreenTimerCheckBox = new CheckBox();
             showScreenTimerCheckBox.Location = new Point(125, 20);
             showScreenTimerCheckBox.Checked = Properties.Settings.Default.ShowScreenTimer;
 
-            screenTimerColorLabel = new SettingsLabel(new Point(0, 50), "Screen timer color");
+            SettingsLabel screenTimerColorLabel = new SettingsLabel(new Point(0, 50), "Screen timer color");
             screenTimerColorPicker = new ColorDialog();
             screenTimerColorPicker.AnyColor = true;
 
-            screenTimerColorPickerButton = new Button();
+            Button screenTimerColorPickerButton = new Button();
             screenTimerColorPickerButton.Text = "Select color...";
             screenTimerColorPickerButton.Size = new Size(100, 25);
             screenTimerColorPickerButton.Location = new Point(150, 50);
@@ -145,7 +121,7 @@ namespace screentimebreak {
             selectedScreenTimeColorLabel.BackColor = Properties.Settings.Default.ScreenTimerColor;
 
             // Tab 1 (Timers)
-            timersTabPage = new TabPage();
+            TabPage timersTabPage = new TabPage();
             timersTabPage.Text = "Timers";
             timersTabPage.TabIndex = 0;
 
@@ -172,7 +148,7 @@ namespace screentimebreak {
             timersTabPage.Controls.Add(megaBreakSecondsInput);
 
             // Tab 2 (Interface)
-            interfaceTabPage = new TabPage();
+            TabPage interfaceTabPage = new TabPage();
             interfaceTabPage.Text = "Interface";
             interfaceTabPage.TabIndex = 1;
 
@@ -183,7 +159,7 @@ namespace screentimebreak {
             interfaceTabPage.Controls.Add(selectedScreenTimeColorLabel);
 
             // Tab control
-            tabControl = new TabControl();
+            TabControl tabControl = new TabControl();
 
             tabControl.Controls.Add(timersTabPage);
             tabControl.Controls.Add(interfaceTabPage);
@@ -197,13 +173,13 @@ namespace screentimebreak {
         }
 
         private void okButton_Click(object sender, EventArgs e) {
-            if (applySettings() == true) {
+            if (ApplySettings() == true) {
                 Close();
             } 
         }
 
         private void applyButton_Click(object sender, EventArgs e) {
-            applySettings();
+            ApplySettings();
         }
 
         private void cancelButton_Click(object sender, EventArgs e) {
@@ -211,14 +187,16 @@ namespace screentimebreak {
         }
 
         private void megaBreaksCheckbox_Click(object sender, EventArgs e) {
-            toggleMegaBreakFields();
+            ToggleMegaBreakFields();
         }
 
         private void screenTimerColorPickerButton_Click(object sender, EventArgs e) {
-            openScreenTimerColorPicker();
+            OpenScreenTimerColorPicker();
         }
 
-        private bool applySettings() {
+        // Save the settings to the configuration file
+        // Return bool: settings validation success
+        private bool ApplySettings() {
             try {
                 int screenTimeMinutes = Convert.ToInt32(screenTimeMinutesInput.Text);
                 int screenTimeSeconds = Convert.ToInt32(screenTimeSecondsInput.Text);
@@ -258,10 +236,10 @@ namespace screentimebreak {
                 Properties.Settings.Default.ShowScreenTimer = showScreenTimerCheckBox.Checked;
                 Properties.Settings.Default.ScreenTimerColor = selectedScreenTimeColorLabel.BackColor;
                 Properties.Settings.Default.Save();
-                if (TimerOverlayForm.getScreenMode()) {
-                    TimerOverlayForm.getScreenTimeLabel().Visible = Properties.Settings.Default.ShowScreenTimer;
+                if (timerOverlayForm.ScreenMode) {
+                    timerOverlayForm.ScreenTimeLabel.Visible = Properties.Settings.Default.ShowScreenTimer;
                 }
-                TimerOverlayForm.getScreenTimeLabel().ForeColor = Properties.Settings.Default.ScreenTimerColor;
+                timerOverlayForm.ScreenTimeLabel.ForeColor = Properties.Settings.Default.ScreenTimerColor;
             }
             catch (FormatException) {
                 MessageBox.Show("All values must be numerical.", "Input error");
@@ -274,20 +252,14 @@ namespace screentimebreak {
             return true;
         }
 
-        private void toggleMegaBreakFields() {
-            if (!megaBreaksCheckbox.Checked) {
-                megaBreakMinutesInput.Enabled = false;
-                megaBreakSecondsInput.Enabled = false;
-                breaksBeforeMegaBreakInput.Enabled = false;
-            }
-            else {
-                megaBreakMinutesInput.Enabled = true;
-                megaBreakSecondsInput.Enabled = true;
-                breaksBeforeMegaBreakInput.Enabled = true;
-            }
+        // Enable/disable megabreak-related input fields according to checkbox value
+        private void ToggleMegaBreakFields() {
+                megaBreakMinutesInput.Enabled = megaBreaksCheckbox.Checked;
+                megaBreakSecondsInput.Enabled = megaBreaksCheckbox.Checked;
+                breaksBeforeMegaBreakInput.Enabled = megaBreaksCheckbox.Checked;
         }
 
-        private void openScreenTimerColorPicker() {
+        private void OpenScreenTimerColorPicker() {
             screenTimerColorPicker.ShowDialog();
             selectedScreenTimeColorLabel.BackColor = screenTimerColorPicker.Color;
         }

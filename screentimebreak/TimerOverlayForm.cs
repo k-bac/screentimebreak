@@ -1,12 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace screentimebreak {
@@ -21,41 +15,24 @@ namespace screentimebreak {
         const int WS_EX_LAYERED = 0x80000;
         const int WS_EX_TRANSPARENT = 0x20;
 
-        private float breakScreenOpacity;
-        private int screenTimeMinutes;
-        private int screenTimeSeconds;
-        private int breakTimeMinutes;
-        private int breakTimeSeconds;
-        private int megaBreakTimeMinutes;
-        private int megaBreakTimeSeconds;
         private int breakCount = 0;
-        private int breaksBeforeMega;
 
-        private static bool screenMode;
-        private bool megaBreaksEnabled;
-        private bool megaBreak;
-        private static Label screenTimeLabel;
+        public bool ScreenMode { get; set; }
+        public Label ScreenTimeLabel { get; set; }
         private Label breakTimeLabel;
 
         public TimerOverlayForm() {
+            InitComponents();
+        }
 
-            breakScreenOpacity = 0.70f;
-            screenTimeMinutes = Properties.Settings.Default.ScreenTimeMinutes;
-            screenTimeSeconds = Properties.Settings.Default.ScreenTimeSeconds;
-            breakTimeMinutes = Properties.Settings.Default.BreakTimeMinutes;
-            breakTimeSeconds = Properties.Settings.Default.BreakTimeSeconds;
-            megaBreakTimeMinutes = Properties.Settings.Default.MegaBreakTimeMinutes;
-            megaBreakTimeSeconds = Properties.Settings.Default.MegaBreakTimeSeconds;
-            megaBreaksEnabled = Properties.Settings.Default.MegaBreaksEnabled;
-            breaksBeforeMega = Properties.Settings.Default.BreaksBeforeMegaBreak;
-
+        private void InitComponents() {
             // Labels
-            screenTimeLabel = new Label();
-            screenTimeLabel.Font = new Font("Calibri", 15);
-            screenTimeLabel.Location = new Point(1600, 5);
-            screenTimeLabel.ForeColor = Properties.Settings.Default.ScreenTimerColor;
-            screenTimeLabel.Visible = Properties.Settings.Default.ShowScreenTimer;
-            screenTimeLabel.AutoSize = true;
+            ScreenTimeLabel = new Label();
+            ScreenTimeLabel.Font = new Font("Calibri", 15);
+            ScreenTimeLabel.Location = new Point(1600, 5);
+            ScreenTimeLabel.ForeColor = Properties.Settings.Default.ScreenTimerColor;
+            ScreenTimeLabel.Visible = Properties.Settings.Default.ShowScreenTimer;
+            ScreenTimeLabel.AutoSize = true;
 
             breakTimeLabel = new Label();
             breakTimeLabel.Font = new Font("Calibri", 50);
@@ -64,10 +41,8 @@ namespace screentimebreak {
             breakTimeLabel.Visible = false;
             breakTimeLabel.AutoSize = true;
 
-            Controls.Add(screenTimeLabel);
+            Controls.Add(ScreenTimeLabel);
             Controls.Add(breakTimeLabel);
-
-            InitializeComponent();
 
             // Visual properties
             FormBorderStyle = FormBorderStyle.None;
@@ -75,11 +50,10 @@ namespace screentimebreak {
             TransparencyKey = BackColor;
             TopMost = true;
 
-            setSizeToAllScreens();
+            SetSizeToAllScreens();
 
             // Call function TimerOverlayForm_Load on form load
             Load += new EventHandler(TimerOverlayForm_Load);
-
         }
 
         protected override void OnLoad(EventArgs e) {
@@ -90,9 +64,7 @@ namespace screentimebreak {
         }
 
         // Set the form's size to cover all screens
-        // Does not work properly if form was launched from non-main screen
-        // This function could probably be named better
-        private void setSizeToAllScreens() {
+        private void SetSizeToAllScreens() {
             Rectangle r = new Rectangle();
 
             foreach (Screen s in Screen.AllScreens) {
@@ -105,16 +77,19 @@ namespace screentimebreak {
             Height = r.Height;
         }
 
-        // Do things when the form is loaded
         private void TimerOverlayForm_Load(object sender, EventArgs e) {
-
-            // Maybe put these in their own class?
             TrayMenu trayMenu = new TrayMenu(this);
-            startMainLoop();
+            StartMainLoop();
         }
 
         // Start the main timer loop
-        private void startMainLoop() {
+        private void StartMainLoop() {
+            int screenTimeMinutes = Properties.Settings.Default.ScreenTimeMinutes;
+            int screenTimeSeconds = Properties.Settings.Default.ScreenTimeSeconds;
+            int breakTimeMinutes = Properties.Settings.Default.BreakTimeMinutes;
+            int breakTimeSeconds = Properties.Settings.Default.BreakTimeSeconds;
+            int megaBreakTimeMinutes = Properties.Settings.Default.MegaBreakTimeMinutes;
+            int megaBreakTimeSeconds = Properties.Settings.Default.MegaBreakTimeSeconds;
 
             int screenTime = (screenTimeMinutes * 60) + screenTimeSeconds;
             int breakTime = (breakTimeMinutes * 60) + breakTimeSeconds;
@@ -126,8 +101,8 @@ namespace screentimebreak {
             int countdownMinutesLeft;
             int countdownSecondsLeft;
 
-            screenMode = true;
-            megaBreak = false;
+            ScreenMode = true;
+            bool megaBreak = false;
 
             Timer countdownTimer = new Timer();
             countdownTimer.Interval = 1000;
@@ -138,20 +113,20 @@ namespace screentimebreak {
             void countdownTimer_Tick(object sender, EventArgs e) {
 
                 if (totalCountdownTimeLeft <= 0) {
-                    if (screenMode) {
-                        enterBreakMode();
+                    if (ScreenMode) {
+                        EnterBreakMode();
                     }
                     else {
-                        enterScreenMode();
+                        EnterScreenMode();
                     }
                 }
 
                 countdownMinutesLeft = totalCountdownTimeLeft / 60;
                 countdownSecondsLeft = totalCountdownTimeLeft - (60 * countdownMinutesLeft);
 
-                if (screenMode) {
-                    screenTimeLabel.Text = countdownMinutesLeft.ToString("00") + ":" + countdownSecondsLeft.ToString("00");
-                    screenTimeLabel.Refresh();
+                if (ScreenMode) {
+                    ScreenTimeLabel.Text = countdownMinutesLeft.ToString("00") + ":" + countdownSecondsLeft.ToString("00");
+                    ScreenTimeLabel.Refresh();
                 }
                 else {
                     if (megaBreak) {
@@ -166,16 +141,16 @@ namespace screentimebreak {
                 totalCountdownTimeLeft--;
             }
 
-            void enterScreenMode() {
-                screenMode = true;
-                fadeOutOfBlack();
+            void EnterScreenMode() {
+                ScreenMode = true;
+                FadeOutOfBreakScreen();
                 breakTimeLabel.Visible = false;
                 totalCountdownTimeLeft = screenTime;
             }
 
-            void enterBreakMode() {
-                if (megaBreaksEnabled) {
-                    if (breakCount == breaksBeforeMega) {
+            void EnterBreakMode() {
+                if (Properties.Settings.Default.MegaBreaksEnabled) {
+                    if (breakCount == Properties.Settings.Default.BreaksBeforeMegaBreak) {
                         megaBreak = true;
                     }
                     else {
@@ -186,10 +161,10 @@ namespace screentimebreak {
                     megaBreak = false;
                 }
 
-                screenMode = false;
-                fadeIntoBlack();
+                ScreenMode = false;
+                FadeIntoBreakScreen();
                 if (Properties.Settings.Default.ShowScreenTimer) {
-                    screenTimeLabel.Visible = false;
+                    ScreenTimeLabel.Visible = false;
                 }
                 breakTimeLabel.Visible = true;
 
@@ -203,8 +178,8 @@ namespace screentimebreak {
                 }
             }
 
-            void fadeIntoBlack() {
-                double maxOpacity = breakScreenOpacity;
+            void FadeIntoBreakScreen() {
+                double maxOpacity = 0.70f;
                 Opacity = 0.00;
                 Timer fadeInTimer = new Timer();
                 fadeInTimer.Interval = 10;
@@ -224,7 +199,7 @@ namespace screentimebreak {
                 }
             }
 
-            void fadeOutOfBlack() {
+            void FadeOutOfBreakScreen() {
                 Timer fadeOutTimer = new Timer();
                 fadeOutTimer.Interval = 10;
                 fadeOutTimer.Enabled = true;
@@ -240,18 +215,11 @@ namespace screentimebreak {
                         Opacity = 1.0;
                         fadeOutTimer.Enabled = false;
                         if (Properties.Settings.Default.ShowScreenTimer) {
-                            screenTimeLabel.Visible = true;
+                            ScreenTimeLabel.Visible = true;
                         }
                     }
                 }
             }
-        }
-        public static Label getScreenTimeLabel() {
-            return screenTimeLabel;
-        }
-
-        public static bool getScreenMode() {
-            return screenMode;
         }
     }
 }

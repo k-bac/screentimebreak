@@ -1,29 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace screentimebreak {
-    class TrayMenu : Form{
+    class TrayMenu : Form {
 
-        private NotifyIcon trayIcon;
-        private ContextMenu trayContextMenu;
-        private MenuItem trayExitItem;
-        private MenuItem traySettingsItem;
+        private TimerOverlayForm timerOverlayForm { get; set; }
 
+        // Param timeOverlayForm: the TimerOverlayForm which will closed when exit option is selected
         public TrayMenu(TimerOverlayForm timerOverlayForm) {
-            trayIcon = new NotifyIcon();
+            this.timerOverlayForm = timerOverlayForm;
+            InitComponents();
+        }
+       
+        private void InitComponents() {
+            NotifyIcon trayIcon = new NotifyIcon();
             trayIcon.BalloonTipIcon = ToolTipIcon.Info;
             trayIcon.Icon = new Icon("trayicon.ico");
             trayIcon.Visible = true;
 
-            trayContextMenu = new ContextMenu();
-            trayExitItem = new MenuItem();
-            traySettingsItem = new MenuItem();
-
+            ContextMenu trayContextMenu = new ContextMenu();
+            MenuItem trayExitItem = new MenuItem();
+            MenuItem traySettingsItem = new MenuItem();
             trayContextMenu.MenuItems.Add(trayExitItem);
             trayContextMenu.MenuItems.Add(traySettingsItem);
 
@@ -42,21 +40,18 @@ namespace screentimebreak {
             }
 
             void TraySettingsItem_Click(object senderObject, EventArgs evArgs) {
-                SettingsForm settingsForm = new SettingsForm();
+                SettingsForm settingsForm = new SettingsForm(timerOverlayForm);
                 settingsForm.Show();
             }
 
-            // Clean up before program exit
             AppDomain.CurrentDomain.ProcessExit += new EventHandler(CurrentDomain_ProcessExit);
 
             // Clean up tray on program exit
-           void CurrentDomain_ProcessExit(object sender, EventArgs e) {
+            void CurrentDomain_ProcessExit(object sender, EventArgs e) {
                 trayIcon.Visible = false;
                 trayIcon.Dispose();
             }
-
         }
-       
 
     }
 }
