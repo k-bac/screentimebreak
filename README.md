@@ -1,3 +1,3 @@
 # screentimebreak
 
-A program that helps with taking breaks when working on a computer. Personal project.
+A program that makes taking breaks easier when working on a computer.
