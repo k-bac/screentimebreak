@@ -26,7 +26,7 @@ namespace screentimebreak {
         }
 
         private void InitComponents() {
-            // Labels
+            // Labels + styles
             ScreenTimeLabel = new Label();
             ScreenTimeLabel.Font = new Font("Calibri", 15);
             ScreenTimeLabel.Location = new Point(1600, 5);
@@ -44,7 +44,7 @@ namespace screentimebreak {
             Controls.Add(ScreenTimeLabel);
             Controls.Add(breakTimeLabel);
 
-            // Visual properties
+            // Form styles
             FormBorderStyle = FormBorderStyle.None;
             BackColor = Color.Black;
             TransparencyKey = BackColor;
@@ -52,7 +52,6 @@ namespace screentimebreak {
 
             SetSizeToAllScreens();
 
-            // Call function TimerOverlayForm_Load on form load
             Load += new EventHandler(TimerOverlayForm_Load);
         }
 
@@ -91,11 +90,11 @@ namespace screentimebreak {
             int megaBreakTimeMinutes = Properties.Settings.Default.MegaBreakTimeMinutes;
             int megaBreakTimeSeconds = Properties.Settings.Default.MegaBreakTimeSeconds;
 
+            // Timer totals in seconds
             int screenTime = (screenTimeMinutes * 60) + screenTimeSeconds;
             int breakTime = (breakTimeMinutes * 60) + breakTimeSeconds;
             int megaBreakTime = (megaBreakTimeMinutes * 60) + megaBreakTimeSeconds;
 
-            // Total countdown time left (seconds)
             int totalCountdownTimeLeft = screenTime;
 
             int countdownMinutesLeft;
