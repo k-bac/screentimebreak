@@ -49,7 +49,7 @@ namespace screentimebreak.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("5")]
+        [global::System.Configuration.DefaultSettingValueAttribute("2")]
         public int BreakTimeMinutes {
             get {
                 return ((int)(this["BreakTimeMinutes"]));
@@ -109,7 +109,7 @@ namespace screentimebreak.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("4")]
+        [global::System.Configuration.DefaultSettingValueAttribute("5")]
         public int BreaksBeforeMegaBreak {
             get {
                 return ((int)(this["BreaksBeforeMegaBreak"]));

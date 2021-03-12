@@ -9,7 +9,7 @@
       <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="BreakTimeMinutes" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">5</Value>
+      <Value Profile="(Default)">2</Value>
     </Setting>
     <Setting Name="BreakTimeSeconds" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
@@ -24,7 +24,7 @@
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="BreaksBeforeMegaBreak" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">4</Value>
+      <Value Profile="(Default)">5</Value>
     </Setting>
     <Setting Name="ShowScreenTimer" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
