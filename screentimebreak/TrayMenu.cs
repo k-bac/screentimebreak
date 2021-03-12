@@ -16,7 +16,7 @@ namespace screentimebreak {
         private void InitComponents() {
             trayIcon = new NotifyIcon();
             trayIcon.Text = "screentimebreak";
-            trayIcon.Icon = new Icon("icon.ico");
+            trayIcon.Icon = new Icon("trayicon.ico");
             trayIcon.Visible = true;
             trayIcon.ShowBalloonTip(20000, "screentimebreak", "screentimebreak is running", ToolTipIcon.None);
             ContextMenu trayContextMenu = new ContextMenu();
