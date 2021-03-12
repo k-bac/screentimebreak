@@ -5,33 +5,33 @@ using System.Windows.Forms;
 namespace screentimebreak {
     class TrayMenu : Form {
 
-        private TimerOverlayForm timerOverlayForm { get; set; }
-
-        // Param timeOverlayForm: the TimerOverlayForm which will closed when exit option is selected
+        private TimerOverlayForm timerOverlayForm;
+        private NotifyIcon trayIcon;
+        // Param timeOverlayForm: the TimerOverlayForm which will be closed when exit option is selected
         public TrayMenu(TimerOverlayForm timerOverlayForm) {
             this.timerOverlayForm = timerOverlayForm;
             InitComponents();
         }
        
         private void InitComponents() {
-            NotifyIcon trayIcon = new NotifyIcon();
-            trayIcon.BalloonTipIcon = ToolTipIcon.Info;
+            trayIcon = new NotifyIcon();
+            trayIcon.Text = "screentimebreak";
             trayIcon.Icon = new Icon("trayicon.ico");
             trayIcon.Visible = true;
-
+            trayIcon.ShowBalloonTip(20000, "screentimebreak", "screentimebreak is running", ToolTipIcon.None);
             ContextMenu trayContextMenu = new ContextMenu();
             MenuItem trayExitItem = new MenuItem();
             MenuItem traySettingsItem = new MenuItem();
             trayContextMenu.MenuItems.Add(trayExitItem);
             trayContextMenu.MenuItems.Add(traySettingsItem);
 
-            trayExitItem.Index = 1;
-            trayExitItem.Text = "Exit";
-            trayExitItem.Click += new EventHandler(TrayExitItem_Click);
-
             traySettingsItem.Index = 0;
             traySettingsItem.Text = "Settings";
             traySettingsItem.Click += new EventHandler(TraySettingsItem_Click);
+
+            trayExitItem.Index = 1;
+            trayExitItem.Text = "Exit";
+            trayExitItem.Click += new EventHandler(TrayExitItem_Click);
 
             trayIcon.ContextMenu = trayContextMenu;
 
@@ -52,6 +52,5 @@ namespace screentimebreak {
                 trayIcon.Dispose();
             }
         }
-
     }
 }
